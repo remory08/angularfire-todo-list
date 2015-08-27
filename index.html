@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="toDoList">
+<head>
+  <meta charset="UTF-8">
+  <title>Todo List</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
+  <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+  <script src="https://cdn.firebase.com/libs/angularfire/1.1.2/angularfire.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body ng-controller="TodosController">
+  <h1>Angular Fire Todo List</h1>
+
+  <form ng-submit="addTodo()">
+    <label>New Todo <input type="text" ng-model="newTodo.text"></label>
+  </form>
+
+  <div ng-repeat="todo in todos">
+      <i ng-click="removeTodo(todo)" class="remove">X</i>
+      <a ng-click="strike(todo)" ng-class="{strike: todo.completed}"> {{todo.text}}</a>
+  </div>
+
+
+<script src="./app.js"></script>
+<script src="./controllers.js"></script>
+</body>
+</html>
