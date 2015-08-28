@@ -1,5 +1,8 @@
-app.controller('TodosController', function($scope, $firebaseArray) {
-  var todosRef = new Firebase("https://burning-torch-8054.firebaseio.com/list")
+app.controller('TodosController', function($scope, $firebaseArray, $firebaseAuth, $location, user) {
+  console.log(user);
+  var authRef = new Firebase("https://rynetodolist.firebaseio.com/");
+  var authObj = $firebaseAuth(authRef);
+  var todosRef = new Firebase("https://rynetodolist.firebaseio.com/list")
   $scope.todos = $firebaseArray(todosRef);
   $scope.newTodo = {text: "", completed: false};
 
@@ -13,9 +16,31 @@ app.controller('TodosController', function($scope, $firebaseArray) {
   }
 
   $scope.strike = function(todo) {
-    console.log(todo);
     todo.completed = !todo.completed;
     $scope.todos.$save(todo);
   }
 
+  $scope.logout = function() {
+    authObj.$unauth();
+    $location.path('/')
+  }
+
+})
+
+app.controller('AuthController', function($scope, $location, $firebaseAuth) {
+  var authRef = new Firebase("https://rynetodolist.firebaseio.com/");
+  var authObj = $firebaseAuth(authRef);
+
+  $scope.register = function() {
+    authObj.$createUser($scope.user).then(function() {
+      $scope.login()
+    })
+  }
+
+  $scope.login = function() {
+    authObj.$authWithPassword($scope.user).then(function() {
+      $location.path('/todos')
+    })
+    //still need to add another .then with a function to handle incorrect login combo
+  }
 })
